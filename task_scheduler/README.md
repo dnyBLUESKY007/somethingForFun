@@ -5,3 +5,9 @@ A task-based scheduler that can provide following features:
 - `run_periodically_since()`
 
 You can refer to `example.py` for usage.
+
+### Update Log
+
+#### v1.0.1
+  - **A** Support async tasks
+

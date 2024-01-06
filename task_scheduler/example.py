@@ -1,4 +1,4 @@
-from scheduler import Task, Scheduler
+from scheduler import Task, TaskAsync, Scheduler
 from datetime import datetime, timedelta
 import logging
 import asyncio
@@ -10,6 +10,10 @@ class TaskExample(Task):
         for i in self.args:
             s += i
         print(f"{self}:", s)
+
+class TaskAsyncExample(TaskAsync):
+    async def run(self) -> None:
+        await asyncio.sleep(2)
 
 async def main():
     logging.basicConfig(
@@ -28,6 +32,10 @@ async def main():
         Scheduler.run_periodically_since(TaskExample(3, 4, desc='task_a2'), start_time+timedelta(seconds=3), period=timedelta(seconds=4)), 
         Scheduler.run_periodically_since(TaskExample(5, 6, desc='task_a3'), start_time+timedelta(seconds=4), period=timedelta(seconds=5)), 
         Scheduler.run_periodically_since(TaskExample(7, 8, desc='task_a4'), datetime(year=2024, month=1, day=3, hour=17, minute=52, second=15), period=timedelta(seconds=2)), 
+        Scheduler.run_async_after(TaskAsyncExample(desc='task_async_1'), start_time+timedelta(seconds=3)), 
+        Scheduler.run_async_after(TaskAsyncExample(desc='task_async_2'), start_time+timedelta(seconds=4)), 
+        Scheduler.run_async_periodically_since(TaskAsyncExample(desc='task_async_a1'), start_time+timedelta(seconds=2), period=timedelta(seconds=3)), 
+        Scheduler.run_async_periodically_since(TaskAsyncExample(desc='task_async_a2'), start_time+timedelta(seconds=3), period=timedelta(seconds=4)), 
     ]
     await asyncio.gather(*tasks)
 
